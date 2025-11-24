@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator UI</title>
+  <link rel="stylesheet" href="./calci.css"/>
+</head>
+
+<body>
+  <div class="wrapper">
+  <h1 class="pumo">PUMO-CALCULATOR</h1>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="btn" id="clear">AC</button>
+      <button class="btn">7</button>
+      <button class="btn">8</button>
+      <button class="btn">9</button>
+      <button class="btn operator">/</button>
+
+      <button class="btn">4</button>
+      <button class="btn">5</button>
+      <button class="btn">6</button>
+      <button class="btn operator">*</button>
+
+      <button class="btn">1</button>
+      <button class="btn">2</button>
+      <button class="btn">3</button>
+      <button class="btn operator">-</button>
+
+      <button class="btn">0</button>
+      <button class="btn">.</button>
+      <button class="btn">=</button>
+      <button class="btn operator">+</button>
+    </div>
+  </div>
+  </div>
+</body>
+<script>
+  var display = document.getElementById('display');
+  var buttons = document.getElementsByClassName('btn');
+  var clearButton = document.getElementById('clear');
+
+  var currentInput = '';
+  var previousInput = '';
+  var operator = null;
+
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function () {
+      var value = this.textContent;
+
+      if (value == 'AC') {
+        return;
+      }
+
+      if (
+        value == '0' || value == '1' || value == '2' || value == '3' ||
+        value == '4' || value == '5' || value == '6' || value == '7' ||
+        value == '8' || value == '9'
+      ) {
+        currentInput = currentInput + value;
+        display.textContent = currentInput;
+      }
+
+      else if (value == '.') {
+        var dot = false;
+        for (var j = 0; j < currentInput.length; j++) {
+          if (currentInput[j] == '.') {
+            dot = true;
+          }
+        }
+        if (dot == false) {
+          currentInput = currentInput + '.';
+          display.textContent = currentInput;
+        }
+      }
+
+      else if (value == '+' || value == '-' || value == '*' || value == '/') {
+        if (currentInput == '') {
+          return;
+        }
+        operator = value;
+        previousInput = currentInput;
+        currentInput = '';
+      }
+
+      else if (value == '=') {
+        if (previousInput == '' || currentInput == '' || operator == null) {
+          return;
+        }
+
+        var num1 = Number(previousInput);
+        var num2 = Number(currentInput);
+        var result = 0;
+
+        if (operator == '+') {
+          result = num1 + num2;
+        } else if (operator == '-') {
+          result = num1 - num2;
+        } else if (operator == '*') {
+          result = num1 * num2;
+        } else if (operator == '/') {
+          if (currentInput == '0') {
+            display.textContent = 'Error';
+            currentInput = '';
+            previousInput = '';
+            operator = null;
+            return;
+          }
+          result = num1 / num2;
+        }
+
+        display.textContent = result;
+        currentInput = result.toString();
+        previousInput = '';
+        operator = null;
+      }
+    });
+  }
+    clearButton.addEventListener('click', function () {
+    currentInput = '';
+    previousInput = '';
+    operator = null;
+    display.textContent = '0';
+  });
+
+</script>
+</html>
